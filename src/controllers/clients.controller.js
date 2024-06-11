@@ -1,9 +1,10 @@
-import { Clients } from "../models/Clients.js";
+import { Clientes } from "../models/clients.js";
 import { Op } from "sequelize";
+
 // Obtener todos los clientes
 export const getClients = async (req, res) => {
   try {
-    const clients = await Clients.findAll();
+    const clients = await Clientes.findAll();
     res.json(clients);
   } catch (error) {
     console.error("Error getting all clients:", error);
@@ -15,7 +16,7 @@ export const getClients = async (req, res) => {
 export const getOneClient = async (req, res) => {
   try {
     const { id } = req.params;
-    const client = await Clients.findByPk(id);
+    const client = await Clientes.findByPk(id);
     if (client) {
       res.json(client);
     } else {
@@ -30,21 +31,18 @@ export const getOneClient = async (req, res) => {
 // Buscar cliente por número telefónico o correo electrónico
 export const findClientByPhoneOrEmail = async (req, res) => {
   try {
-    const { numero_telofonico, correo_electronico } = req.body;
-
-    const client = await Clients.findOne({
+    const { NUMERO_TELEFONO, CORREO } = req.body;
+   
+    const client = await Clientes.findOne({
       where: {
-        [Op.or]: [
-          { numero_telofonico },
-          { correo_electronico }
-        ]
-      }
+        [Op.or]: [{ NUMERO_TELEFONO }, { CORREO }],
+      },
     });
 
     if (client) {
       res.json(client);
     } else {
-      res.status(404).json({ message: "Cliente no encontrado" });
+      res.status(202).json({ message: "Cliente no encontrado" });
     }
   } catch (error) {
     console.error("Error buscando el cliente:", error);
@@ -52,32 +50,48 @@ export const findClientByPhoneOrEmail = async (req, res) => {
   }
 };
 
-
 // Crear un nuevo cliente
 export const createClient = async (req, res) => {
   try {
-    const { nombres, apellidos, numero_telofonico, correo_electronico } = req.body;
+    const {
+      NOMBRE,
+      APELLIDOS,
+      DIRECCION,
+      LOCALIDAD,
+      id_cp,
+      NUMERO_TELEFONO,
+      CORREO,
+      TIPO_DE_PLAN,
+      status,
+    } = req.body;
 
     // Verificar si ya existe un cliente con el mismo número telefónico o correo electrónico
-    const existingClient = await Clients.findOne({
+    const existingClient = await Clientes.findOne({
       where: {
-        [Op.or]: [
-          { numero_telofonico },
-          { correo_electronico }
-        ]
-      }
+        [Op.or]: [{ NUMERO_TELEFONO }, { CORREO }],
+      },
     });
 
     if (existingClient) {
-      return res.status(400).json({ message: "El cliente ya está registrado con ese número telefónico o correo electrónico" });
+      return res
+        .status(400)
+        .json({
+          message:
+            "El cliente ya está registrado con ese número telefónico o correo electrónico",
+        });
     }
 
     // Crear un nuevo cliente
-    const newClient = await Clients.create({
-      nombres,
-      apellidos,
-      numero_telofonico,
-      correo_electronico,
+    const newClient = await Clientes.create({
+      NOMBRE,
+      APELLIDOS,
+      DIRECCION,
+      LOCALIDAD,
+      id_cp,
+      NUMERO_TELEFONO,
+      CORREO,
+      TIPO_DE_PLAN,
+      status,
     });
 
     res.json(newClient);
@@ -91,18 +105,32 @@ export const createClient = async (req, res) => {
 export const updateClient = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombres, apellidos, numero_telofonico, correo_electronico } =
-      req.body;
+    const {
+      NOMBRE,
+      APELLIDOS,
+      DIRECCION,
+      LOCALIDAD,
+      id_cp,
+      NUMERO_TELEFONO,
+      CORREO,
+      TIPO_DE_PLAN,
+      status,
+    } = req.body;
 
-    const client = await Clients.findByPk(id);
+    const client = await Clientes.findByPk(id);
     if (!client) {
       return res.status(404).json({ message: "Cliente no encontrado" });
     }
 
-    client.nombres = nombres || client.nombres;
-    client.apellidos = apellidos || client.apellidos;
-    client.numero_telofonico = numero_telofonico || client.numero_telofonico;
-    client.correo_electronico = correo_electronico || client.correo_electronico;
+    client.NOMBRE = NOMBRE || client.NOMBRE;
+    client.APELLIDOS = APELLIDOS || client.APELLIDOS;
+    client.DIRECCION = DIRECCION || client.DIRECCION;
+    client.LOCALIDAD = LOCALIDAD || client.LOCALIDAD;
+    client.id_cp = id_cp || client.id_cp;
+    client.NUMERO_TELEFONO = NUMERO_TELEFONO || client.NUMERO_TELEFONO;
+    client.CORREO = CORREO || client.CORREO;
+    client.TIPO_DE_PLAN = TIPO_DE_PLAN || client.TIPO_DE_PLAN;
+    client.status = status || client.status;
 
     await client.save();
 
@@ -118,7 +146,7 @@ export const deleteClient = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const client = await Clients.findByPk(id);
+    const client = await Clientes.findByPk(id);
     if (!client) {
       return res.status(404).json({ message: "Cliente no encontrado" });
     }

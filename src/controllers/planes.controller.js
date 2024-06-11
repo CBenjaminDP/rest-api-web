@@ -30,11 +30,11 @@ export const getOnePlan = async (req, res) => {
 // Crear un nuevo plan
 export const createPlan = async (req, res) => {
   try {
-    const { nombre_del_plan } = req.body;
+    const { nombre_plan } = req.body;
 
     // Verificar si ya existe un plan con el mismo nombre
     const existingPlan = await TiposDePlanes.findOne({
-      where: { nombre_del_plan },
+      where: { nombre_plan },
     });
     if (existingPlan) {
       return res.status(400).json({ message: "El nombre del plan ya existe" });
@@ -42,7 +42,7 @@ export const createPlan = async (req, res) => {
 
     // Crear un nuevo plan
     const newPlan = await TiposDePlanes.create({
-      nombre_del_plan,
+      nombre_plan,
     });
 
     res.json(newPlan);
@@ -52,19 +52,18 @@ export const createPlan = async (req, res) => {
   }
 };
 
-
 // Actualizar un plan existente
 export const updatePlan = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre_del_plan } = req.body;
+    const { nombre_plan } = req.body;
 
     const plan = await TiposDePlanes.findByPk(id);
     if (!plan) {
       return res.status(404).json({ message: "Plan no encontrado" });
     }
 
-    plan.nombre_del_plan = nombre_del_plan || plan.nombre_del_plan;
+    plan.nombre_plan = nombre_plan || plan.nombre_plan;
 
     await plan.save();
 

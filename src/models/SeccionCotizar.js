@@ -10,31 +10,31 @@ export const SeccionCotizar = sequelize.define(
       autoIncrement: true,
     },
     nombres: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING(255),
     },
     apellidos: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING(255),
     },
     numero_telefonico: {
-      type: DataTypes.NUMERIC(10),
+      type: DataTypes.STRING(20),
     },
     correo_electronico: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(255),
     },
     fifa: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING(255),
+    },
+    cp: {
+      type: DataTypes.INTEGER,
+    },
+    tipo_de_plan: {
+      type: DataTypes.INTEGER,
+    },
+    numero_usuarios: {
+      type: DataTypes.INTEGER,
     },
     status: {
       type: DataTypes.BOOLEAN,
-    },
-    numero_usuarios: {
-      type: DataTypes.NUMERIC(10),
-    },
-    cp: {
-      type: DataTypes.STRING(10),
-    },
-    tipo_de_plan: {
-      type: DataTypes.INTEGER, // Cambiado a INTEGER para que coincida con id_plan
     },
   },
   {

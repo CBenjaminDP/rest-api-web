@@ -1,15 +1,21 @@
 import { SeccionCotizar } from "../models/SeccionCotizar.js";
+import { createCprI } from "../controllers/cpr.controller.js";
+import { getOneCountryCode } from "../controllers/countryCode.controller.js";
+import { sequelize } from "../database/database.js";
+import { Op } from "sequelize";
 
+// Obtener todas las cotizaciones
 export const getCotizaciones = async (req, res) => {
   try {
-    const cotizacion = await SeccionCotizar.findAll();
-    res.json(cotizacion);
+    const cotizaciones = await SeccionCotizar.findAll();
+    res.json(cotizaciones);
   } catch (error) {
     console.error("Error getting all:", error);
     res.status(500).json({ message: "Error getting all", error });
   }
 };
 
+// Obtener una cotización por su id
 export const getOneCotizacion = async (req, res) => {
   try {
     const { id } = req.params;
@@ -25,7 +31,20 @@ export const getOneCotizacion = async (req, res) => {
   }
 };
 
+// Variable global para mantener el contador
+let currentNumber = 1;
+
+// Obtener el siguiente número secuencial
+const getNextFormattedNumber = () => {
+  const formattedNumber = String(currentNumber).padStart(4, "0");
+  currentNumber += 1;
+  return formattedNumber;
+};
+
+// Crear una nueva cotización
 export const createCotizacion = async (req, res) => {
+  const t = await sequelize.transaction();
+
   try {
     const {
       nombres,
@@ -33,44 +52,75 @@ export const createCotizacion = async (req, res) => {
       numero_telefonico,
       correo_electronico,
       fifa,
-      status,
-      numero_usuarios,
       cp,
       tipo_de_plan,
+      numero_usuarios,
+      status,
     } = req.body;
 
-    // Asegurarse de que los valores de cp y tipo_de_plan existan en sus tablas correspondientes
-    const newSeccionCotizar = await SeccionCotizar.create({
-      nombres,
-      apellidos,
-      numero_telefonico,
-      correo_electronico,
-      fifa,
-      status,
-      numero_usuarios,
-      cp, // Debe existir en la tabla cps
-      tipo_de_plan, // Debe existir en la tabla tipos_de_planes
-    });
+    // Obtener el siguiente número secuencial
+    const id_Prospecto = getNextFormattedNumber();
 
-    res.json(newSeccionCotizar);
+    // Insertar en la tabla SeccionCotizar
+    const newSeccionCotizar = await SeccionCotizar.create(
+      {
+        nombres,
+        apellidos,
+        numero_telefonico,
+        correo_electronico,
+        fifa,
+        cp,
+        tipo_de_plan,
+        numero_usuarios,
+        status,
+      },
+      { transaction: t }
+    );
+
+    // Numero dependiendo la fifa MEX = 0052
+    const codigoFIFA = "0052";
+
+    // Insertar en la tabla CPR
+    console.log(newSeccionCotizar.id_prospecto);
+    console.log(id_Prospecto);
+
+    const newCpr = await createCprI(
+      {
+        id_propuesta: newSeccionCotizar.id_prospecto,
+        id_prospecto: id_Prospecto,
+        fifa: "MEX",
+        id_admin_entry: "0001", // O cualquier otro valor relevante
+      },
+      t
+    );
+
+    // Confirmar la transacción
+    await t.commit();
+
+    res.json({ newSeccionCotizar, newCpr });
   } catch (error) {
-    console.error("Error creating cotizacion:", error);
-    res.status(500).json({ message: "Error creating cotizacion", error });
+    // Deshacer la transacción en caso de error
+    await t.rollback();
+
+    console.error("Error creating cotizacion and CPR:", error);
+    res
+      .status(500)
+      .json({ message: "Error creating cotizacion and CPR", error });
   }
 };
 
+// Actualizar una cotización existente
 export const updateCotizacion = async (req, res) => {
   try {
     const { id } = req.params;
     const {
-      nombres,
-      apellidos,
+      Nombres,
+      Apellidos,
       numero_telefonico,
       correo_electronico,
-      fifa,
+      pais,
       status,
-      numero_usuarios,
-      cp,
+      CP,
       tipo_de_plan,
     } = req.body;
 
@@ -79,16 +129,15 @@ export const updateCotizacion = async (req, res) => {
       return res.status(404).json({ message: "Cotización no encontrada" });
     }
 
-    cotizacion.nombres = nombres || cotizacion.nombres;
-    cotizacion.apellidos = apellidos || cotizacion.apellidos;
+    cotizacion.Nombres = Nombres || cotizacion.Nombres;
+    cotizacion.Apellidos = Apellidos || cotizacion.Apellidos;
     cotizacion.numero_telefonico =
       numero_telefonico || cotizacion.numero_telefonico;
     cotizacion.correo_electronico =
       correo_electronico || cotizacion.correo_electronico;
-    cotizacion.fifa = fifa || cotizacion.fifa;
+    cotizacion.pais = pais || cotizacion.pais;
     cotizacion.status = status || cotizacion.status;
-    cotizacion.numero_usuarios = numero_usuarios || cotizacion.numero_usuarios;
-    cotizacion.cp = cp || cotizacion.cp;
+    cotizacion.CP = CP || cotizacion.CP;
     cotizacion.tipo_de_plan = tipo_de_plan || cotizacion.tipo_de_plan;
 
     await cotizacion.save();
@@ -100,7 +149,32 @@ export const updateCotizacion = async (req, res) => {
   }
 };
 
+export const findByEmailAndPhone = async (req, res) => {
+  try {
+    const { numero_telefonico, correo_electronico } = req.body;
 
+    const cotizacion = await SeccionCotizar.findOne({
+      where: {
+        [Op.or]: [{ numero_telefonico }, { correo_electronico }],
+      },
+    });
+
+    if (cotizacion) {
+      if (cotizacion.status) {
+        res.json({ message: "Cotización encontrada", cotizacion });
+      } else {
+        res.json({ message: "Cotización no encontrada" });
+      }
+    } else {
+      res.json({ message: "Cotización no encontrada" });
+    }
+  } catch (error) {
+    console.error("Error finding cotizacion:", error);
+    res.status(500).json({ message: "Error finding cotizacion", error });
+  }
+};
+
+// Eliminar una cotización
 export const deleteCotizacion = async (req, res) => {
   try {
     const { id } = req.params;
@@ -118,5 +192,3 @@ export const deleteCotizacion = async (req, res) => {
     res.status(500).json({ message: "Error deleting cotizacion", error });
   }
 };
-
-

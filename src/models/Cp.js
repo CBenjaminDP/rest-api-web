@@ -1,55 +1,54 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
-import { SeccionCotizar } from "./SeccionCotizar.js";
 
-export const Cp = sequelize.define(
+export const CP = sequelize.define(
   "cp",
   {
     d_codigo: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.INTEGER,
       primaryKey: true,
     },
     d_asenta: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(255),
     },
     d_tipo_asenta: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(255),
     },
-    d_mnpio: {
-      type: DataTypes.STRING(100),
+    D_mnpio: {
+      type: DataTypes.STRING(255),
     },
     d_estado: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(255),
     },
-    d_ciudad: {
-      type: DataTypes.STRING(100),
+    d_cuidad: {
+      type: DataTypes.STRING(255),
     },
-    d_cp: {
-      type: DataTypes.STRING(10),
+    d_CP: {
+      type: DataTypes.STRING(255),
     },
     c_estado: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING(255),
     },
     c_oficina: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING(255),
     },
-    c_cp: {
-      type: DataTypes.STRING(10),
+    c_CP: {
+      type: DataTypes.STRING(255),
     },
-    c_tipo_asenta: {
-      type: DataTypes.STRING(50),
+    c_tipo_asent: {
+      type: DataTypes.STRING(255),
     },
     c_mnpio: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(255),
     },
     id_asenta_cpcons: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING(255),
     },
     d_zona: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(255),
     },
-    c_cve_ciudad: {
-      type: DataTypes.STRING(10),
+    c_cve_cuidad: {
+      type: DataTypes.STRING(255),
     },
   },
   {

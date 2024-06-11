@@ -1,6 +1,5 @@
-import { DataTypes, ForeignKeyConstraintError } from "sequelize";
+import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
-import { SeccionCotizar } from "./SeccionCotizar.js";
 
 export const TiposDePlanes = sequelize.define(
   "tipos_de_planes",
@@ -10,12 +9,11 @@ export const TiposDePlanes = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    nombre_del_plan: {
-      type: DataTypes.TEXT,
+    nombre_plan: {
+      type: DataTypes.STRING(255),
     },
   },
   {
     timestamps: false,
   }
 );
-
