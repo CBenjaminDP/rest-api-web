@@ -4,40 +4,44 @@ import { sequelize } from "../database/database.js";
 export const Clientes = sequelize.define(
   "clientes",
   {
-    ID_CLIENTE: {
+    id_cliente: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    NOMBRE: {
+    nombre: {
       type: DataTypes.STRING(255),
     },
-    APELLIDOS: {
+    apellidos: {
       type: DataTypes.STRING(255),
     },
-    DIRECCION: {
+    direccion: {
       type: DataTypes.STRING(255),
     },
-    LOCALIDAD: {
+    localidad: {
       type: DataTypes.STRING(255),
     },
-    id_cp: {
-      type: DataTypes.INTEGER,
+    cp: {
+      type: DataTypes.STRING(255),
     },
-    NUMERO_TELEFONO: {
+    numero_telefonico: {
       type: DataTypes.STRING(20),
     },
-    CORREO: {
+    correo: {
       type: DataTypes.STRING(255),
     },
-    TIPO_DE_PLAN: {
+    tipo_de_plan: {
       type: DataTypes.INTEGER,
     },
     status: {
       type: DataTypes.STRING(50),
     },
+    tipo_de_socio: {
+      type: DataTypes.STRING(50),
+    },
   },
   {
     timestamps: false,
+    freezeTableName: true,
   }
 );

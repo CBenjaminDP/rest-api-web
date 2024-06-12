@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
 export const CountryCode = sequelize.define(
-  "country_code",
+  "country_codes",
   {
     FIFA: {
       type: DataTypes.STRING(10),
@@ -176,5 +176,6 @@ export const CountryCode = sequelize.define(
   },
   {
     timestamps: false,
+    freezeTableName: true,
   }
 );

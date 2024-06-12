@@ -39,5 +39,6 @@ export const SeccionCotizar = sequelize.define(
   },
   {
     timestamps: false,
+    freezeTableName: true,
   }
 );

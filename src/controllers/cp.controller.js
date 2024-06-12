@@ -130,6 +130,7 @@ export const deleteCp = async (req, res) => {
 export const findByCodigo = async (req, res) => {
   try {
     const { d_codigo } = req.params;
+    console.log(d_codigo);
     const cp = await CP.findOne({
       where: {
         d_codigo,

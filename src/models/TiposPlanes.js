@@ -15,5 +15,6 @@ export const TiposDePlanes = sequelize.define(
   },
   {
     timestamps: false,
+    freezeTableName: true,
   }
 );

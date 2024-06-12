@@ -44,7 +44,8 @@ const getNextFormattedNumber = () => {
 // Crear una nueva cotización
 export const createCotizacion = async (req, res) => {
   const t = await sequelize.transaction();
-
+  // Obtener el siguiente número secuencial
+  const id_prospecto = getNextFormattedNumber();
   try {
     const {
       nombres,
@@ -58,12 +59,10 @@ export const createCotizacion = async (req, res) => {
       status,
     } = req.body;
 
-    // Obtener el siguiente número secuencial
-    const id_Prospecto = getNextFormattedNumber();
-
     // Insertar en la tabla SeccionCotizar
     const newSeccionCotizar = await SeccionCotizar.create(
       {
+        id_prospecto,
         nombres,
         apellidos,
         numero_telefonico,
@@ -77,18 +76,15 @@ export const createCotizacion = async (req, res) => {
       { transaction: t }
     );
 
-    // Numero dependiendo la fifa MEX = 0052
-    const codigoFIFA = "0052";
-
     // Insertar en la tabla CPR
-    console.log(newSeccionCotizar.id_prospecto);
-    console.log(id_Prospecto);
+    console.log(newSeccionCotizar);
+    console.log(id_prospecto);
 
     const newCpr = await createCprI(
       {
         id_propuesta: newSeccionCotizar.id_prospecto,
-        id_prospecto: id_Prospecto,
-        fifa: "MEX",
+        id_prospecto: id_prospecto,
+        fifa: "0052",
         id_admin_entry: "0001", // O cualquier otro valor relevante
       },
       t
@@ -108,7 +104,6 @@ export const createCotizacion = async (req, res) => {
       .json({ message: "Error creating cotizacion and CPR", error });
   }
 };
-
 // Actualizar una cotización existente
 export const updateCotizacion = async (req, res) => {
   try {

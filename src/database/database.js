@@ -12,5 +12,11 @@ export const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,
     dialect: process.env.DB_DIALECT, // Aquí se especifica el dialecto
+    dialectOptions: {
+      ssl: {
+        require: true, // Esto habilita SSL
+        rejectUnauthorized: false, // Esto desactiva la verificación del certificado
+      },
+    },
   }
 );

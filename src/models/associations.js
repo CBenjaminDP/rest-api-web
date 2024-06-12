@@ -23,10 +23,10 @@ export const setupAssociations = () => {
     CountryCode.hasMany(CPR, { foreignKey: 'fifa', as: 'cpr_list' });
 
     // Asociación entre Clientes y CP
-    Clientes.belongsTo(CP, { foreignKey: 'id_cp', as: 'cp_details' });
-    CP.hasMany(Clientes, { foreignKey: 'id_cp', as: 'client_list' });
+    Clientes.belongsTo(CP, { foreignKey: 'cp', as: 'cp_details' });
+    CP.hasMany(Clientes, { foreignKey: 'cp', as: 'client_list' });
 
     // Asociación entre Clientes y TiposDePlanes
-    Clientes.belongsTo(TiposDePlanes, { foreignKey: 'TIPO_DE_PLAN', targetKey: 'id_plan', as: 'plan_details' });
-    TiposDePlanes.hasMany(Clientes, { foreignKey: 'TIPO_DE_PLAN', sourceKey: 'id_plan', as: 'client_list' });
+    Clientes.belongsTo(TiposDePlanes, { foreignKey: 'tipo_de_plan', targetKey: 'id_plan', as: 'plan_details' });
+    TiposDePlanes.hasMany(Clientes, { foreignKey: 'tipo_de_plan', sourceKey: 'id_plan', as: 'client_list' });
 };

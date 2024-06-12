@@ -14,16 +14,16 @@ export const CP = sequelize.define(
     d_tipo_asenta: {
       type: DataTypes.STRING(255),
     },
-    D_mnpio: {
+    d_mnpio: {
       type: DataTypes.STRING(255),
     },
     d_estado: {
       type: DataTypes.STRING(255),
     },
-    d_cuidad: {
+    d_ciudad: {
       type: DataTypes.STRING(255),
     },
-    d_CP: {
+    d_cp: {
       type: DataTypes.STRING(255),
     },
     c_estado: {
@@ -32,10 +32,10 @@ export const CP = sequelize.define(
     c_oficina: {
       type: DataTypes.STRING(255),
     },
-    c_CP: {
+    c_cp: {
       type: DataTypes.STRING(255),
     },
-    c_tipo_asent: {
+    c_tipo_asenta: {
       type: DataTypes.STRING(255),
     },
     c_mnpio: {
@@ -47,11 +47,12 @@ export const CP = sequelize.define(
     d_zona: {
       type: DataTypes.STRING(255),
     },
-    c_cve_cuidad: {
+    c_cve_ciudad: {
       type: DataTypes.STRING(255),
     },
   },
   {
     timestamps: false,
+    freezeTableName: true,
   }
 );
