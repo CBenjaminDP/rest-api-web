@@ -2,6 +2,7 @@ import { SeccionCotizar } from "../models/SeccionCotizar.js";
 import { createCprI } from "../controllers/cpr.controller.js";
 import { getOneCountryCode } from "../controllers/countryCode.controller.js";
 import { sequelize } from "../database/database.js";
+import { QueryTypes } from "sequelize";
 import { Op } from "sequelize";
 
 // Obtener todas las cotizaciones
@@ -31,21 +32,10 @@ export const getOneCotizacion = async (req, res) => {
   }
 };
 
-// Variable global para mantener el contador
-let currentNumber = 1;
-
-// Obtener el siguiente número secuencial
-const getNextFormattedNumber = () => {
-  const formattedNumber = String(currentNumber).padStart(4, "0");
-  currentNumber += 1;
-  return formattedNumber;
-};
-
 // Crear una nueva cotización
 export const createCotizacion = async (req, res) => {
   const t = await sequelize.transaction();
-  // Obtener el siguiente número secuencial
-  const id_prospecto = getNextFormattedNumber();
+
   try {
     const {
       nombres,
@@ -59,51 +49,60 @@ export const createCotizacion = async (req, res) => {
       status,
     } = req.body;
 
-    // Insertar en la tabla SeccionCotizar
-    const newSeccionCotizar = await SeccionCotizar.create(
+    // Llamar a la función SQL para crear cotización y CPR
+    await sequelize.query(
+      `SELECT create_cotizacion(
+        :nombres,
+        :apellidos,
+        :numero_telefonico,
+        :correo_electronico,
+        :fifa,
+        :cp,
+        :tipo_de_plan,
+        :numero_usuarios,
+        :status
+      )`,
       {
-        id_prospecto,
-        nombres,
-        apellidos,
-        numero_telefonico,
-        correo_electronico,
-        fifa,
-        cp,
-        tipo_de_plan,
-        numero_usuarios,
-        status,
-      },
-      { transaction: t }
+        replacements: {
+          nombres,
+          apellidos,
+          numero_telefonico,
+          correo_electronico,
+          fifa,
+          cp,
+          tipo_de_plan,
+          numero_usuarios,
+          status
+        },
+        type: sequelize.QueryTypes.SELECT,
+        transaction: t
+      }
     );
 
-    // Insertar en la tabla CPR
-    console.log(newSeccionCotizar);
-    console.log(id_prospecto);
-
-    const newCpr = await createCprI(
+    // Obtener el último registro insertado en CPR
+    const [cprData] = await sequelize.query(
+      `SELECT * FROM get_last_cpr()`,
       {
-        id_propuesta: newSeccionCotizar.id_prospecto,
-        id_prospecto: id_prospecto,
-        fifa: "0052",
-        id_admin_entry: "0001", // O cualquier otro valor relevante
-      },
-      t
+        type: sequelize.QueryTypes.SELECT,
+        transaction: t
+      }
     );
 
     // Confirmar la transacción
     await t.commit();
 
-    res.json({ newSeccionCotizar, newCpr });
+    res.json({ message: "Cotización y CPR creados exitosamente", cprData });
   } catch (error) {
     // Deshacer la transacción en caso de error
     await t.rollback();
 
     console.error("Error creating cotizacion and CPR:", error);
-    res
-      .status(500)
-      .json({ message: "Error creating cotizacion and CPR", error });
+    res.status(500).json({ message: "Error creating cotizacion and CPR", error });
   }
 };
+
+
+
 // Actualizar una cotización existente
 export const updateCotizacion = async (req, res) => {
   try {

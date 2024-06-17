@@ -5,7 +5,7 @@ export const CP = sequelize.define(
   "cp",
   {
     d_codigo: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       primaryKey: true,
     },
     d_asenta: {

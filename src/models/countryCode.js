@@ -4,173 +4,173 @@ import { sequelize } from "../database/database.js";
 export const CountryCode = sequelize.define(
   "country_codes",
   {
-    FIFA: {
+    fifa: {
       type: DataTypes.STRING(10),
       primaryKey: true,
     },
     dial: {
       type: DataTypes.STRING(10),
     },
-    ISO3166_1_Alpha_3: {
+    iso3166_1_alpha: {
       type: DataTypes.STRING(3),
     },
-    MARC: {
+    marc: {
       type: DataTypes.STRING(10),
     },
     is_independent: {
       type: DataTypes.BOOLEAN,
     },
-    ISO3166_1_numeric: {
-      type: DataTypes.INTEGER,
-    },
-    GAUL: {
+    iso3166_1_numeric: {
       type: DataTypes.STRING(10),
     },
-    FIPS: {
+    gaul: {
       type: DataTypes.STRING(10),
     },
-    WMO: {
+    fips: {
       type: DataTypes.STRING(10),
     },
-    ISO3166_1_Alpha_2: {
+    wmo: {
+      type: DataTypes.STRING(10),
+    },
+    iso3166_1_alpha_2: {
       type: DataTypes.STRING(2),
     },
-    ITU: {
+    itu: {
       type: DataTypes.STRING(10),
     },
-    IOC: {
+    ioc: {
       type: DataTypes.STRING(10),
     },
-    DS: {
+    ds: {
       type: DataTypes.STRING(10),
     },
-    UNTERM_SPANISH_FORMAL: {
+    unterm_spanish_formal: {
       type: DataTypes.STRING(255),
     },
-    GLOBAL_CODE: {
+    global_code: {
       type: DataTypes.STRING(10),
     },
-    INTERMEDIATE_REGION_CODE: {
+    intermediate_region_code: {
       type: DataTypes.STRING(10),
     },
-    OFFICIAL_NAME_FR: {
+    official_name_fr: {
       type: DataTypes.STRING(255),
     },
-    UNTERM_FRENCH_SHORT: {
+    unterm_french_short: {
       type: DataTypes.STRING(255),
     },
-    ISO4217_currency_name: {
+    iso4217_currency_name: {
       type: DataTypes.STRING(255),
     },
-    Developed_Developing_Countries: {
+    developed_developing_countries: {
       type: DataTypes.STRING(50),
     },
-    UNTERM_RUSSIAN_FORMAL: {
+    unterm_russian_formal: {
       type: DataTypes.STRING(255),
     },
-    UNTERM_English_Short: {
+    unterm_english_short: {
       type: DataTypes.STRING(255),
     },
-    ISO4217_currency_alphabetic_code: {
-      type: DataTypes.STRING(3),
+    iso4217_currency_alphabetic_code: {
+      type: DataTypes.STRING(10),
     },
-    Small_Island_Developing_States_SIDS: {
+    small_island_developing_states_sids: {
+      type: DataTypes.BOOLEAN,
+    },
+    unterm_spanish_short: {
+      type: DataTypes.STRING(255),
+    },
+    iso4217_currency_numeric_code: {
+      type: DataTypes.STRING(10),
+    },
+    unterm_chinese_formal: {
+      type: DataTypes.STRING(255),
+    },
+    unterm_french_formal: {
+      type: DataTypes.STRING(255),
+    },
+    unterm_russian_short: {
+      type: DataTypes.STRING(255),
+    },
+    m49: {
+      type: DataTypes.STRING(10),
+    },
+    sub_region_code: {
+      type: DataTypes.STRING(10),
+    },
+    region_code: {
+      type: DataTypes.STRING(10),
+    },
+    official_name_ar: {
+      type: DataTypes.STRING(255),
+    },
+    iso4217_currency_minor_unit: {
+      type: DataTypes.STRING(10),
+    },
+    unterm_arabic_formal: {
+      type: DataTypes.STRING(255),
+    },
+    unterm_chinese_short: {
+      type: DataTypes.STRING(255),
+    },
+    land_locked_developing_countries_lldc: {
+      type: DataTypes.BOOLEAN,
+    },
+    intermediate_region_name: {
+      type: DataTypes.STRING(255),
+    },
+    official_name_es: {
+      type: DataTypes.STRING(255),
+    },
+    unterm_english_formal: {
+      type: DataTypes.STRING(255),
+    },
+    official_name_cn: {
+      type: DataTypes.STRING(255),
+    },
+    official_name_en: {
+      type: DataTypes.STRING(255),
+    },
+    iso4217_currency_country_name: {
+      type: DataTypes.STRING(255),
+    },
+    least_developed_countries_ldc: {
+      type: DataTypes.BOOLEAN,
+    },
+    region_name: {
+      type: DataTypes.STRING(255),
+    },
+    unterm_arabic_short: {
+      type: DataTypes.STRING(255),
+    },
+    sub_region_name: {
+      type: DataTypes.STRING(255),
+    },
+    official_name_ru: {
+      type: DataTypes.STRING(255),
+    },
+    global_name: {
+      type: DataTypes.STRING(255),
+    },
+    capital: {
+      type: DataTypes.STRING(255),
+    },
+    continent: {
       type: DataTypes.STRING(50),
     },
-    UNTERM_SPANISH_SHORT: {
-      type: DataTypes.STRING(255),
-    },
-    ISO4217_currency_numeric_code: {
-      type: DataTypes.INTEGER,
-    },
-    UNTERM_CHINESE_FORMAL: {
-      type: DataTypes.STRING(255),
-    },
-    UNTERM_FRENCH_FORMAL: {
-      type: DataTypes.STRING(255),
-    },
-    UNTERM_RUSSIAN_SHORT: {
-      type: DataTypes.STRING(255),
-    },
-    M49: {
+    tld: {
       type: DataTypes.STRING(10),
     },
-    SUB_REGION_CODE: {
+    languages: {
+      type: DataTypes.STRING(255),
+    },
+    geoname_id: {
       type: DataTypes.STRING(10),
     },
-    REGION_CODE: {
-      type: DataTypes.STRING(10),
-    },
-    OFFICIAL_NAME_AR: {
+    cldr_display_name: {
       type: DataTypes.STRING(255),
     },
-    ISO4217_currency_minor_unit: {
-      type: DataTypes.STRING(10),
-    },
-    UNTERM_ARABIC_FORMAL: {
-      type: DataTypes.STRING(255),
-    },
-    UNTERM_CHINESE_SHORT: {
-      type: DataTypes.STRING(255),
-    },
-    Land_Locked_Developing_Countries_LLDC: {
-      type: DataTypes.STRING(50),
-    },
-    INTERMEDIATE_REGION_NAME: {
-      type: DataTypes.STRING(255),
-    },
-    OFFICIAL_NAME_ES: {
-      type: DataTypes.STRING(255),
-    },
-    UNTERM_ENGLISH_FORMAL: {
-      type: DataTypes.STRING(255),
-    },
-    OFFICIAL_NAME_CN: {
-      type: DataTypes.STRING(255),
-    },
-    OFFICIAL_NAME_EN: {
-      type: DataTypes.STRING(255),
-    },
-    ISO4217_currency_country_name: {
-      type: DataTypes.STRING(255),
-    },
-    Least_Developed_Countries_LDC: {
-      type: DataTypes.STRING(50),
-    },
-    REGION_NAME: {
-      type: DataTypes.STRING(255),
-    },
-    UNTERM_ARABIC_SHORT: {
-      type: DataTypes.STRING(255),
-    },
-    SUB_REGION_NAME: {
-      type: DataTypes.STRING(255),
-    },
-    OFFICIAL_REGION_NAME: {
-      type: DataTypes.STRING(255),
-    },
-    GLOBAL_NAME: {
-      type: DataTypes.STRING(255),
-    },
-    CAPITAL: {
-      type: DataTypes.STRING(255),
-    },
-    CONTINENT: {
-      type: DataTypes.STRING(255),
-    },
-    TLD: {
-      type: DataTypes.STRING(10),
-    },
-    LANGUAGES: {
-      type: DataTypes.STRING(255),
-    },
-    GEONAME_ID: {
-      type: DataTypes.INTEGER,
-    },
-    CLDR_DISPLAY_NAME: {
-      type: DataTypes.STRING(255),
-    },
-    EDGAR: {
+    edgar: {
       type: DataTypes.STRING(10),
     },
   },

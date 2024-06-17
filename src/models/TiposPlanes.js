@@ -9,7 +9,7 @@ export const TiposDePlanes = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    nombre_plan: {
+    nombre_del_plan: {
       type: DataTypes.STRING(255),
     },
   },

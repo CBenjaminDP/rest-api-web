@@ -6,6 +6,7 @@ import planesRoutes from "./routes/planes.routes.js";
 import clientRoutes from "./routes/clients.routes.js";
 import countryCodeRoutes from "./routes/countryCode.routes.js";
 import cprRoutes from "./routes/cpr.routes.js";
+
 import dotenv from "dotenv";
 
 // Cargar variables de entorno desde .env
@@ -29,5 +30,6 @@ app.use(planesRoutes);
 app.use(clientRoutes);
 app.use(countryCodeRoutes);
 app.use(cprRoutes);
+
 
 export default app;

@@ -22,8 +22,10 @@ const PORT = process.env.PORT || 3000;
 
 async function main() {
   try {
-    // Sincronizar los modelos con la base de datos, sin forzar la recreación de tablas
+    // Sincronizar los modelos con la base de datos, forzando la recreación de tablas
     await sequelize.sync();
+
+    console.log("Database & tables created!");
 
     // Iniciar el servidor
     app.listen(PORT, () => {
