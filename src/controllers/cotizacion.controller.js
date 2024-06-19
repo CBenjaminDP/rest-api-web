@@ -1,9 +1,6 @@
 import { SeccionCotizar } from "../models/SeccionCotizar.js";
-import { createCprI } from "../controllers/cpr.controller.js";
-import { getOneCountryCode } from "../controllers/countryCode.controller.js";
 import { sequelize } from "../database/database.js";
-import { QueryTypes } from "sequelize";
-import { Op } from "sequelize";
+import { QueryTypes, Op } from "sequelize";
 
 // Obtener todas las cotizaciones
 export const getCotizaciones = async (req, res) => {
@@ -43,21 +40,21 @@ export const createCotizacion = async (req, res) => {
       numero_telefonico,
       correo_electronico,
       fifa,
-      cp,
+      id_cp,
       tipo_de_plan,
       numero_usuarios,
       status,
     } = req.body;
 
     // Llamar a la función SQL para crear cotización y CPR
-    await sequelize.query(
-      `SELECT create_cotizacion(
+    const result = await sequelize.query(
+      `SELECT * FROM create_cotizacion(
         :nombres,
         :apellidos,
         :numero_telefonico,
         :correo_electronico,
         :fifa,
-        :cp,
+        :id_cp,
         :tipo_de_plan,
         :numero_usuarios,
         :status
@@ -69,29 +66,20 @@ export const createCotizacion = async (req, res) => {
           numero_telefonico,
           correo_electronico,
           fifa,
-          cp,
+          id_cp,
           tipo_de_plan,
           numero_usuarios,
-          status
+          status,
         },
-        type: sequelize.QueryTypes.SELECT,
-        transaction: t
-      }
-    );
-
-    // Obtener el último registro insertado en CPR
-    const [cprData] = await sequelize.query(
-      `SELECT * FROM get_last_cpr()`,
-      {
-        type: sequelize.QueryTypes.SELECT,
-        transaction: t
+        type: QueryTypes.SELECT,
+        transaction: t,
       }
     );
 
     // Confirmar la transacción
     await t.commit();
 
-    res.json({ message: "Cotización y CPR creados exitosamente", cprData });
+    res.json({ message: "Cotización y CPR creados exitosamente", cprData: result });
   } catch (error) {
     // Deshacer la transacción en caso de error
     await t.rollback();
@@ -101,21 +89,20 @@ export const createCotizacion = async (req, res) => {
   }
 };
 
-
-
 // Actualizar una cotización existente
 export const updateCotizacion = async (req, res) => {
   try {
     const { id } = req.params;
     const {
-      Nombres,
-      Apellidos,
+      nombres,
+      apellidos,
       numero_telefonico,
       correo_electronico,
-      pais,
-      status,
-      CP,
+      fifa,
+      id_cp,
       tipo_de_plan,
+      numero_usuarios,
+      status,
     } = req.body;
 
     const cotizacion = await SeccionCotizar.findByPk(id);
@@ -123,16 +110,17 @@ export const updateCotizacion = async (req, res) => {
       return res.status(404).json({ message: "Cotización no encontrada" });
     }
 
-    cotizacion.Nombres = Nombres || cotizacion.Nombres;
-    cotizacion.Apellidos = Apellidos || cotizacion.Apellidos;
+    cotizacion.nombres = nombres || cotizacion.nombres;
+    cotizacion.apellidos = apellidos || cotizacion.apellidos;
     cotizacion.numero_telefonico =
       numero_telefonico || cotizacion.numero_telefonico;
     cotizacion.correo_electronico =
       correo_electronico || cotizacion.correo_electronico;
-    cotizacion.pais = pais || cotizacion.pais;
-    cotizacion.status = status || cotizacion.status;
-    cotizacion.CP = CP || cotizacion.CP;
+    cotizacion.fifa = fifa || cotizacion.fifa;
+    cotizacion.id_cp = id_cp || cotizacion.id_cp;
     cotizacion.tipo_de_plan = tipo_de_plan || cotizacion.tipo_de_plan;
+    cotizacion.numero_usuarios = numero_usuarios || cotizacion.numero_usuarios;
+    cotizacion.status = status || cotizacion.status;
 
     await cotizacion.save();
 
@@ -143,6 +131,7 @@ export const updateCotizacion = async (req, res) => {
   }
 };
 
+// Encontrar una cotización por email y teléfono
 export const findByEmailAndPhone = async (req, res) => {
   try {
     const { numero_telefonico, correo_electronico } = req.body;

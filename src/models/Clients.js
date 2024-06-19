@@ -21,20 +21,20 @@ export const Clientes = sequelize.define(
     localidad: {
       type: DataTypes.STRING(255),
     },
-    cp: {
-      type: DataTypes.STRING(255),
-    },
     numero_telefonico: {
       type: DataTypes.STRING(20),
     },
     correo: {
       type: DataTypes.STRING(255),
     },
-    tipo_de_plan: {
+    id_plan: {
       type: DataTypes.INTEGER,
     },
     status: {
       type: DataTypes.STRING(50),
+    },
+    id_cp: {
+      type: DataTypes.STRING(255),
     },
     tipo_de_socio: {
       type: DataTypes.STRING(50),

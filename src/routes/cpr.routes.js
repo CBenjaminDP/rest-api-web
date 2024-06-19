@@ -1,7 +1,7 @@
 import express from "express";
 import {
   getCprs,
-  getOneCpr,
+  getOneCprByProspecto,
   createCpr,
   updateCpr,
   deleteCpr,
@@ -13,15 +13,15 @@ const router = express.Router();
 router.get("/cprs", getCprs);
 
 // Obtener una propuesta de CPR por su id_propuesta
-router.get("/cprs/:id", getOneCpr);
+router.get("/cprs/:id_prospecto", getOneCprByProspecto);
 
 // Crear una nueva propuesta de CPR
 router.post("/cprs", createCpr);
 
 // Actualizar una propuesta de CPR existente
-router.put("/cprs/:id", updateCpr);
+router.put("/cprs/:id_prospecto", updateCpr);
 
 // Eliminar una propuesta de CPR
-router.delete("/cprs/:id", deleteCpr);
+router.delete("/cprs/:id_prospecto", deleteCpr);
 
 export default router;

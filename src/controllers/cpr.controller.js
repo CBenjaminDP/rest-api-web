@@ -11,11 +11,11 @@ export const getCprs = async (req, res) => {
   }
 };
 
-// Obtener una propuesta de CPR por su id_propuesta
-export const getOneCpr = async (req, res) => {
+// Obtener una propuesta de CPR por su id_prospecto
+export const getOneCprByProspecto = async (req, res) => {
   try {
-    const { id } = req.params;
-    const cpr = await CPR.findByPk(id);
+    const { id_prospecto } = req.params;
+    const cpr = await CPR.findOne({ where: { id_prospecto: id_prospecto } });
     if (cpr) {
       res.json(cpr);
     } else {
@@ -46,40 +46,27 @@ export const createCpr = async (req, res) => {
   }
 };
 
-// Crear una nueva propuesta de CPR
-export const createCprI = async ({ id_propuesta, id_prospecto, fifa, id_admin_entry }, transaction) => {
-  try {
-    const newCpr = await CPR.create({
-      id_propuesta,
-      id_prospecto,
-      fifa,
-      id_admin_entry,
-    }, { transaction });
-
-    return newCpr;
-  } catch (error) {
-    console.error("Error creating CPR:", error);
-    throw error;
-  }
-};
-
 // Actualizar una propuesta de CPR existente
 export const updateCpr = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { id_prospecto, fifa, id_admin_entry } = req.body;
+    const { id_prospecto } = req.params; // Obtener el id_prospecto del parámetro de la URL
+    const { fifa, id_admin_entry } = req.body; // Obtener los datos del cuerpo de la solicitud
 
-    const cpr = await CPR.findByPk(id);
+    // Buscar el CPR por id_prospecto
+    const cpr = await CPR.findOne({ where: { id_prospecto } });
     if (!cpr) {
       return res.status(404).json({ message: "CPR no encontrado" });
     }
 
-    cpr.id_prospecto = id_prospecto || cpr.id_prospecto;
-    cpr.fifa = fifa || cpr.fifa;
-    cpr.id_admin_entry = id_admin_entry || cpr.id_admin_entry;
+    // Actualizar los campos del CPR con los valores proporcionados en el cuerpo de la solicitud
+    cpr.fifa = fifa !== undefined ? fifa : cpr.fifa;
+    cpr.id_admin_entry =
+      id_admin_entry !== undefined ? id_admin_entry : cpr.id_admin_entry;
 
+    // Guardar los cambios en la base de datos
     await cpr.save();
 
+    // Enviar la respuesta con el CPR actualizado
     res.json(cpr);
   } catch (error) {
     console.error("Error updating CPR:", error);
@@ -90,9 +77,9 @@ export const updateCpr = async (req, res) => {
 // Eliminar una propuesta de CPR
 export const deleteCpr = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id_prospecto } = req.params;
 
-    const cpr = await CPR.findByPk(id);
+    const cpr = await CPR.findOne({ where: { id_prospecto } });
     if (!cpr) {
       return res.status(404).json({ message: "CPR no encontrado" });
     }

@@ -24,7 +24,7 @@ export const SeccionCotizar = sequelize.define(
     fifa: {
       type: DataTypes.STRING(255),
     },
-    cp: {
+    id_cp: {
       type: DataTypes.INTEGER,
     },
     tipo_de_plan: {

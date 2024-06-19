@@ -4,9 +4,12 @@ import { sequelize } from "../database/database.js";
 export const CP = sequelize.define(
   "cp",
   {
-    d_codigo: {
-      type: DataTypes.STRING,
+    id_c: {
+      type: DataTypes.INTEGER,
       primaryKey: true,
+    },
+    id_cp:{
+      type: DataTypes.INTEGER,
     },
     d_asenta: {
       type: DataTypes.STRING(255),
@@ -35,7 +38,7 @@ export const CP = sequelize.define(
     c_cp: {
       type: DataTypes.STRING(255),
     },
-    c_tipo_asenta: {
+    c_tipo_asent: {
       type: DataTypes.STRING(255),
     },
     c_mnpio: {

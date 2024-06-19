@@ -129,15 +129,15 @@ export const deleteCp = async (req, res) => {
 // Buscar un código postal por d_codigo
 export const findByCodigo = async (req, res) => {
   try {
-    const { d_codigo } = req.params;
-    console.log(d_codigo);
+    const { id_cp } = req.params;
+    console.log(id_cp);
     const cp = await CP.findOne({
       where: {
-        d_codigo,
+        id_cp,
       },
     });
     if (cp) {
-      res.json({ message: "SI existe código" });
+      res.json({ message: "SI existe código", cp});
     } else {
       res.json({ message: "No existe código" });
     }

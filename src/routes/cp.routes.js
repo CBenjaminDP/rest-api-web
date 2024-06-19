@@ -10,7 +10,7 @@ import {
 const router = Router();
 
 router.get("/cp", getCps);
-router.get("/cp/:d_codigo", findByCodigo);
+router.get("/cp/:id_cp", findByCodigo);
 router.post("/cp", createCp);
 router.put("/cp/:id", updateCp);
 router.delete("/cp/:id", deleteCp);
